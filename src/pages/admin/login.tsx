@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+// import { useNavigate } from "@tanstack/react-router";
 import { useLogin } from "@/features/auth/hooks/useLogin";
 
 export default function AdminLoginPage() {
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
   const loginMutation = useLogin();
 
   const [email, setEmail] = useState("");
@@ -15,9 +15,9 @@ export default function AdminLoginPage() {
     loginMutation.mutate(
       { email, password },
       {
-        onSuccess: () => {
-          navigate({ to: "/admin/unverified" });  //ignore for now
-        },
+        // onSuccess: () => {
+        //   navigate({ to: "/admin/unverified" });  //ignore for now
+        // },
       }
     );
   };
