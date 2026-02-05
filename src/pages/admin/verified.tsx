@@ -1,9 +1,9 @@
 import AdminLayout from "@/components/layout/AdminLayout";
-import AdminGuard from "@/components/AdminGuard";
+// import AdminGuard from "@/components/AdminGuard";
 
 export default function AdminVerifiedPage() {
   return (
-    <AdminGuard>
+    // <AdminGuard>   dont delte this, we will add auth later
       <AdminLayout>
         <div className="p-6">
           <h1 className="text-xl font-semibold">
@@ -20,6 +20,6 @@ export default function AdminVerifiedPage() {
           </div>
         </div>
       </AdminLayout>
-    </AdminGuard>
+    // </AdminGuard>
   );
 }
