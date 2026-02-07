@@ -2,7 +2,7 @@
 
 export type ItemType = "FOUND" | "LOST";
 
-export type ItemStatus = "UNVERIFIED" | "VERIFIED";
+export type ItemStatus = "UNVERIFIED" | "VERIFIED" | "RETURNED";
 
 /**
  * Base item shape used in admin panel.
@@ -10,9 +10,11 @@ export type ItemStatus = "UNVERIFIED" | "VERIFIED";
  */
 export interface Item {
   id: string;
-  type: ItemType;
+  type: string; // broadened for mock data flexibility
   status: ItemStatus;
   category: string;
   campus_zone: string;
   found_at: string; // ISO 8601
 }
+
+export type MockItem = Item;
