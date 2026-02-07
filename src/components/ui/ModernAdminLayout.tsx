@@ -77,7 +77,7 @@ export default function ModernAdminLayout({ children }: ModernAdminLayoutProps) 
              const style = window.getComputedStyle(div);
              if (style.position === 'fixed' && style.bottom === '0px' && style.right === '0px' && parseInt(style.zIndex) > 50) {
                  if (div.innerHTML.includes('TanStack') || div.innerHTML.includes('svg')) {
-                     div.style.display = 'none';
+                     (div as HTMLElement).style.display = 'none';
                  }
              }
         });
