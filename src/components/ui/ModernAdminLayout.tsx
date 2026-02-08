@@ -1,4 +1,4 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation,useNavigate } from "@tanstack/react-router";
 import { type ReactNode, useEffect, useState } from "react";
 import {
   LogOut,
@@ -17,6 +17,21 @@ interface ModernAdminLayoutProps {
 export default function ModernAdminLayout({ children }: ModernAdminLayoutProps) {
   const location = useLocation();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+  // Clear auth data
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("token_expires_in");
+
+  // Redirect to login
+  navigate({
+    to: "/admin/login",
+    replace: true, // prevents back navigation
+  });
+};
+
 
   /**
    * IMPORTANT:
@@ -157,9 +172,7 @@ export default function ModernAdminLayout({ children }: ModernAdminLayoutProps) 
         {/* Logout */}
         <div className="p-4 border-t border-white/5">
           <button
-            onClick={() => {
-              window.location.href = "/admin/login";
-            }}
+           onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-colors"
           >
             <LogOut className="w-4 h-4" />
