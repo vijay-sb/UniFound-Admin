@@ -3,6 +3,7 @@ import AdminPageHeader from "@/components/ui/AdminPageHeader";
 import { CheckCircle, Lock } from "lucide-react";
 import ItemCard from "@/features/items/components/ItemCard";
 import { useAdminItems } from "@/features/items/hooks/useAdminItems";
+import AdminGuard from "@/components/AdminGuard";
 
 export default function AdminAvailablePage() {
   const { data, isLoading, isError } = useAdminItems();
@@ -11,6 +12,7 @@ export default function AdminAvailablePage() {
     data?.filter((item) => item.status === "AVAILABLE") ?? [];
 
   return (
+    <AdminGuard>
     <ModernAdminLayout>
       <div className="p-8">
         <AdminPageHeader
@@ -48,5 +50,6 @@ export default function AdminAvailablePage() {
         )}
       </div>
     </ModernAdminLayout>
+    </AdminGuard>
   );
 }

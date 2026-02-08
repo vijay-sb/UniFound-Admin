@@ -4,6 +4,7 @@ import { ListTodo } from "lucide-react";
 import ItemCard from "@/features/items/components/ItemCard";
 import { useAdminItems } from "@/features/items/hooks/useAdminItems";
 import { useVerifyItem } from "@/features/items/hooks/useVerifyItem";
+import AdminGuard from "@/components/AdminGuard";
 
 export default function AdminUnverifiedPage() {
   const { data, isLoading, isError } = useAdminItems();
@@ -13,6 +14,7 @@ export default function AdminUnverifiedPage() {
     data?.filter((item) => item.status === "UNVERIFIED") ?? [];
 
   return (
+    <AdminGuard>
     <ModernAdminLayout>
       <div className="p-8">
         <AdminPageHeader
@@ -42,5 +44,6 @@ export default function AdminUnverifiedPage() {
         )}
       </div>
     </ModernAdminLayout>
+    </AdminGuard>
   );
 }
