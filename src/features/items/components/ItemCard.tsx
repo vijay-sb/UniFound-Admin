@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Calendar, MapPin, Tag, Image } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import VerifyButton from "./VerifyButton";
-import type { MockItem } from "../types";
+import type { AdminItem } from "../types";
 
 interface ItemCardProps {
-  item: MockItem;
+  item: AdminItem;
   onVerify?: (id: string) => void;
   showVerifyAction?: boolean;
 }
@@ -66,24 +66,23 @@ export default function ItemCard({
               Preview Image
             </button>
 
-            {showVerifyAction && onVerify && (
+            {showVerifyAction && onVerify && item.status === "UNVERIFIED" && (
               <VerifyButton itemId={item.id} onVerify={onVerify} />
             )}
           </div>
         </div>
       </div>
 
-      {/* Image Preview Modal */}
+      {/* Image Preview Modal (mock for now) */}
       {showImage && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center">
           <div className="bg-[#0a0a0a] border border-white/10 rounded-xl p-4 w-[320px]">
             <h4 className="text-sm font-medium mb-3 text-white">
-              Image Preview (Mock)
+              Image Preview
             </h4>
 
             <div className="h-48 bg-gray-800 flex items-center justify-center text-gray-500 text-sm rounded">
-              signed GET URL for <br />
-              {item.image_key ?? "found-items/mock.jpg"}
+              Signed image URL (fetched on demand)
             </div>
 
             <button
