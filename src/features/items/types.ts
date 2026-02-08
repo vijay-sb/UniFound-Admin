@@ -1,20 +1,10 @@
 // src/features/items/types.ts
-
-export type ItemType = "FOUND" | "LOST";
-
-export type ItemStatus = "UNVERIFIED" | "VERIFIED" | "RETURNED";
-
-/**
- * Base item shape used in admin panel.
- * Private fields are intentionally excluded.
- */
-export interface Item {
+export interface MockItem {
   id: string;
-  type: string; // broadened for mock data flexibility
-  status: ItemStatus;
+  type: "FOUND";
+  status: "UNVERIFIED" | "VERIFIED" | "AVAILABLE";
   category: string;
   campus_zone: string;
-  found_at: string; // ISO 8601
+  found_at: string;
+  image_key?: string; // needed for preview
 }
-
-export type MockItem = Item;
