@@ -5,14 +5,33 @@ export type ItemStatus =
   | "CLAIMED"
   | "REJECTED";
 
-export interface AdminItem {
-  id: string;
-  type: "FOUND";
-  status: ItemStatus;
-  category: string;
-  campus_zone: string;
-  found_at: string;
-  reported_by: string;
-  created_at: string;
-}
 
+export type AdminItem = {
+  id: string;
+  type: "FOUND" | "LOST";
+  status: "UNVERIFIED" | "VERIFIED";
+  category: string;
+  campusZone: string;
+  foundAt: {
+    time: string;
+    valid: boolean;
+  };
+  reportedBy: string;
+  createdAt: string;
+};
+
+
+
+export type AdminItemDTO = {
+  ID: string;
+  Type: string;
+  Status: string;
+  Category: string;
+  CampusZone: string;
+  FoundAt: {
+    Time: string;
+    Valid: boolean;
+  };
+  ReportedBy: string;
+  CreatedAt: string;
+};

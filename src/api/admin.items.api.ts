@@ -1,27 +1,11 @@
 // src/api/admin.items.api.ts
 
+import type { AdminItem, AdminItemDTO } from "@/features/items/types";
 import { apiRequest } from "./client";
 
 /**
  * Admin Item (matches backend response exactly)
  */
-export interface AdminItemDTO {
-  id: string;
-  type: "FOUND";
-  status:
-    | "UNVERIFIED"
-    | "VERIFIED"
-    | "AVAILABLE"
-    | "CLAIMED"
-    | "REJECTED";
-
-  category: string;
-  campus_zone: string;
-  found_at: string;
-
-  reported_by: string;
-  created_at: string;
-}
 
 /**
  * Fetch ALL items for admin dashboard.
@@ -30,9 +14,24 @@ export interface AdminItemDTO {
  * GET /api/admin/items
  * Auth: ADMIN | STAFF
  */
-export function fetchAdminItems() {
-  return apiRequest<AdminItemDTO[]>("/admin/items");
+export async function fetchAdminItems(): Promise<AdminItem[]> {
+  const data = await apiRequest<AdminItemDTO[]>("/admin/items");
+
+  return data.map((item) => ({
+    id: item.ID,
+    type: item.Type,
+    status: item.Status,
+    category: item.Category,
+    campusZone: item.CampusZone,
+    foundAt: {
+      time: item.FoundAt.Time,
+      valid: item.FoundAt.Valid,
+    },
+    reportedBy: item.ReportedBy,
+    createdAt: item.CreatedAt,
+  }));
 }
+
 
 /**
  * Verify item after physical confirmation.
@@ -80,8 +79,9 @@ export interface ItemImageResponse {
   image_url: string;
 }
 
-export function fetchItemImage(itemId: string) {
-  return apiRequest<ItemImageResponse>(
+export async function fetchItemImage(itemId: string): Promise<string> {
+  const res = await apiRequest<{ image_key: string }>(
     `/admin/items/${itemId}/image`
   );
+  return res.image_key;
 }
