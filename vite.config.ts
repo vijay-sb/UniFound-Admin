@@ -2,12 +2,9 @@ import { defineConfig } from 'vite'
 import { devtools } from '@tanstack/devtools-vite'
 import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { fileURLToPath, URL } from 'node:url'
 
-// Vite configuration
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     devtools(),
@@ -18,9 +15,21 @@ export default defineConfig({
     viteReact(),
     tailwindcss(),
   ],
+
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+
+  // 🔥 THIS IS THE IMPORTANT PART
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
 })

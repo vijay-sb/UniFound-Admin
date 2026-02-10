@@ -1,10 +1,39 @@
-// src/features/items/types.ts
-export interface MockItem {
+export type ItemStatus =
+  | "UNVERIFIED"
+  | "VERIFIED"
+  | "AVAILABLE"
+  | "CLAIMED"
+  | "REJECTED";
+
+
+export type AdminItem = {
   id: string;
-  type: "FOUND";
-  status: "UNVERIFIED" | "VERIFIED" | "AVAILABLE";
+  type: "FOUND" | "LOST";
+  status: ItemStatus; // ✅ FIX
   category: string;
-  campus_zone: string;
-  found_at: string;
-  image_key?: string; // needed for preview
-}
+  campusZone: string;
+  foundAt: {
+    time: string;
+    valid: boolean;
+  };
+  reportedBy: string;
+  createdAt: string;
+};
+
+
+
+
+export type AdminItemDTO = {
+  ID: string;
+  Type: "FOUND" | "LOST";
+  Status: ItemStatus;
+  Category: string;
+  CampusZone: string;
+  FoundAt: {
+    Time: string;
+    Valid: boolean;
+  };
+  ReportedBy: string;
+  CreatedAt: string;
+};
+
