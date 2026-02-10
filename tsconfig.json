@@ -1,3 +1,4 @@
+/* TypeScript Configuration */
 {
   "include": ["**/*.ts", "**/*.tsx"],
   "compilerOptions": {
