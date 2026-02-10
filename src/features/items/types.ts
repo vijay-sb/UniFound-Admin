@@ -24,8 +24,8 @@ export type AdminItem = {
 
 export type AdminItemDTO = {
   ID: string;
-  Type: string;
-  Status: string;
+  Type: "FOUND" | "LOST";
+  Status: ItemStatus;
   Category: string;
   CampusZone: string;
   FoundAt: {
@@ -35,3 +35,4 @@ export type AdminItemDTO = {
   ReportedBy: string;
   CreatedAt: string;
 };
+
