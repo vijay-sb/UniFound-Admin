@@ -9,7 +9,7 @@ export type ItemStatus =
 export type AdminItem = {
   id: string;
   type: "FOUND" | "LOST";
-  status: "UNVERIFIED" | "VERIFIED";
+  status: ItemStatus; // ✅ FIX
   category: string;
   campusZone: string;
   foundAt: {
@@ -19,6 +19,7 @@ export type AdminItem = {
   reportedBy: string;
   createdAt: string;
 };
+
 
 
 
