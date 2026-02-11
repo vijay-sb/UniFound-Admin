@@ -3,6 +3,7 @@ import { useParams, Link } from "@tanstack/react-router";
 import ModernAdminLayout from "@/components/ui/ModernAdminLayout";
 import AdminPageHeader from "@/components/ui/AdminPageHeader";
 import { ShieldCheck, Plus, CheckCircle, ArrowLeft } from "lucide-react";
+import AdminGuard from "@/components/AdminGuard";
 
 type ClaimQuestion = {
   id: string;
@@ -37,6 +38,7 @@ export default function AdminVerifiedItemPage() {
   };
 
   return (
+    <AdminGuard>
     <ModernAdminLayout>
       <div className="p-8 max-w-3xl">
         <Link
@@ -109,5 +111,6 @@ export default function AdminVerifiedItemPage() {
         )}
       </div>
     </ModernAdminLayout>
+    </AdminGuard>
   );
 }

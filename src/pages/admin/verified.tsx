@@ -3,28 +3,14 @@ import AdminPageHeader from "@/components/ui/AdminPageHeader";
 import { ShieldCheck, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import ItemCard from "@/features/items/components/ItemCard";
-import type { MockItem } from "@/features/items/types";
-
-const mockVerifiedItems: MockItem[] = [
-  {
-    id: "101",
-    type: "FOUND",
-    status: "VERIFIED",
-    category: "MacBook Charger",
-    campus_zone: "Library",
-    found_at: "2025-01-20T10:30:00Z",
-  },
-  {
-    id: "102",
-    type: "FOUND",
-    status: "VERIFIED",
-    category: "Blue Umbrella",
-    campus_zone: "Main Entrance",
-    found_at: "2025-01-22T14:15:00Z",
-  },
-];
+import { useAdminItems } from "@/features/items/hooks/useAdminItems";
 
 export default function AdminVerifiedPage() {
+  const { data, isLoading, isError } = useAdminItems();
+
+  const verifiedItems =
+    data?.filter((item) => item.status === "VERIFIED") ?? [];
+
   return (
     <ModernAdminLayout>
       <div className="p-8">
@@ -34,8 +20,11 @@ export default function AdminVerifiedPage() {
           icon={ShieldCheck}
         />
 
+        {isLoading && <p className="text-gray-500">Loading…</p>}
+        {isError && <p className="text-red-500">Failed to load items.</p>}
+
         <div className="space-y-6">
-          {mockVerifiedItems.map((item) => (
+          {verifiedItems.map((item) => (
             <div key={item.id} className="space-y-3">
               <ItemCard item={item} />
 
@@ -53,7 +42,7 @@ export default function AdminVerifiedPage() {
           ))}
         </div>
 
-        {mockVerifiedItems.length === 0 && (
+        {!isLoading && verifiedItems.length === 0 && (
           <div className="text-center py-20 text-gray-500 border border-dashed rounded-xl mt-10">
             No verified items found.
           </div>
