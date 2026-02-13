@@ -4,12 +4,24 @@ import { CheckCircle, Lock } from "lucide-react";
 import ItemCard from "@/features/items/components/ItemCard";
 import { useAdminItems } from "@/features/items/hooks/useAdminItems";
 import AdminGuard from "@/components/AdminGuard";
+import AdminSearchBar from "@/features/items/components/AdminSearchBar";
+import AdminFilterBar from "@/features/items/components/AdminFilterBar";
+import { useItemSearch } from "@/features/items/hooks/useItemSearch";
 
 export default function AdminAvailablePage() {
   const { data, isLoading, isError } = useAdminItems();
 
-  const availableItems =
-    data?.filter((item) => item.status === "AVAILABLE") ?? [];
+  const availableItemsRaw = data?.filter((item) => item.status === "AVAILABLE") ?? [];
+
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems,
+    filters,
+    setFilters,
+    availableCategories,
+    availableZones,
+  } = useItemSearch(availableItemsRaw);
 
   return (
     <AdminGuard>
@@ -21,11 +33,21 @@ export default function AdminAvailablePage() {
           icon={CheckCircle}
         />
 
+        <div className="mb-6 space-y-4">
+          <AdminSearchBar value={searchQuery} onChange={setSearchQuery} />
+          <AdminFilterBar
+            filters={filters}
+            setFilters={setFilters}
+            categories={availableCategories}
+            zones={availableZones}
+          />
+        </div>
+
         {isLoading && <p className="text-gray-500">Loading…</p>}
         {isError && <p className="text-red-500">Failed to load items.</p>}
 
         <div className="space-y-6">
-          {availableItems.map((item) => (
+          {filteredItems.map((item) => (
             <div key={item.id} className="space-y-3">
               <ItemCard item={item} />
 
@@ -43,9 +65,9 @@ export default function AdminAvailablePage() {
           ))}
         </div>
 
-        {!isLoading && availableItems.length === 0 && (
+        {!isLoading && filteredItems.length === 0 && (
           <div className="text-center py-20 text-gray-500 border border-dashed rounded-xl mt-10">
-            No available items at the moment.
+            No items found matching your search.
           </div>
         )}
       </div>

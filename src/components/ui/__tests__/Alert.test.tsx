@@ -1,3 +1,9 @@
+/**
+ * This file tests the Alert component.
+ * It checks if:
+ * 1. The alert renders successfully.
+ * 2. The alert changes appearance when using different variants (like "destructive").
+ */
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { Alert, AlertTitle, AlertDescription } from '../Alert'

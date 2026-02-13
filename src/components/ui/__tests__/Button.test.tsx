@@ -1,3 +1,10 @@
+/**
+ * This file tests the Button component.
+ * It checks if:
+ * 1. The button shows the correct text.
+ * 2. Clicking the button works correctly.
+ * 3. The button looks different when disabled or using a different style.
+ */
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { Button } from '../Button'

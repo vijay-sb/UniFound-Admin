@@ -1,3 +1,10 @@
+/**
+ * This file tests the Tooltip component.
+ * It checks if:
+ * 1. The tooltip text is hidden at first.
+ * 2. Hovering over the button shows the tooltip text.
+ * 3. The tooltip appears correctly for screen readers.
+ */
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '../Tooltip'

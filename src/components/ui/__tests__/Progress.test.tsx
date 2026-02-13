@@ -1,3 +1,9 @@
+/**
+ * This file tests the Progress component (progress bar).
+ * It checks if:
+ * 1. The progress bar appears on the screen.
+ * 2. It correctly shows the completion percentage (e.g., 60% full).
+ */
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { Progress } from '../Progress'

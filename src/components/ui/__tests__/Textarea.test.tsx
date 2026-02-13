@@ -1,3 +1,10 @@
+/**
+ * This file tests the Textarea component (multi-line input).
+ * It checks if:
+ * 1. The textarea appears with the correct placeholder text.
+ * 2. The user can type multiple lines of text.
+ * 3. The textarea cannot be typed in when disabled.
+ */
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { Textarea } from '../Textarea'

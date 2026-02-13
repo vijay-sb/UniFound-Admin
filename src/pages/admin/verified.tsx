@@ -1,6 +1,9 @@
 import ModernAdminLayout from "@/components/ui/ModernAdminLayout";
+import AdminSearchBar from "@/features/items/components/AdminSearchBar";
+import AdminFilterBar from "@/features/items/components/AdminFilterBar";
+import { useItemSearch } from "@/features/items/hooks/useItemSearch";
 import AdminPageHeader from "@/components/ui/AdminPageHeader";
-import { ShieldCheck, ArrowRight } from "lucide-react";
+import { CheckCircle, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import ItemCard from "@/features/items/components/ItemCard";
 import { useAdminItems } from "@/features/items/hooks/useAdminItems";
@@ -8,8 +11,16 @@ import { useAdminItems } from "@/features/items/hooks/useAdminItems";
 export default function AdminVerifiedPage() {
   const { data, isLoading, isError } = useAdminItems();
 
-  const verifiedItems =
-    data?.filter((item) => item.status === "VERIFIED") ?? [];
+  const verifiedItemsRaw = data?.filter((item) => item.status === "VERIFIED") ?? [];
+  const {
+    searchQuery,
+    setSearchQuery,
+    filteredItems,
+    filters,
+    setFilters,
+    availableCategories,
+    availableZones,
+  } = useItemSearch(verifiedItemsRaw);
 
   return (
     <ModernAdminLayout>
@@ -17,14 +28,24 @@ export default function AdminVerifiedPage() {
         <AdminPageHeader
           title="Verified Database"
           description="Verified items ready to be prepared for claims."
-          icon={ShieldCheck}
+          icon={CheckCircle}
         />
+
+        <div className="mb-6 space-y-4">
+          <AdminSearchBar value={searchQuery} onChange={setSearchQuery} />
+          <AdminFilterBar
+            filters={filters}
+            setFilters={setFilters}
+            categories={availableCategories}
+            zones={availableZones}
+          />
+        </div>
 
         {isLoading && <p className="text-gray-500">Loading…</p>}
         {isError && <p className="text-red-500">Failed to load items.</p>}
 
         <div className="space-y-6">
-          {verifiedItems.map((item) => (
+          {filteredItems.map((item) => (
             <div key={item.id} className="space-y-3">
               <ItemCard item={item} />
 
@@ -42,9 +63,9 @@ export default function AdminVerifiedPage() {
           ))}
         </div>
 
-        {!isLoading && verifiedItems.length === 0 && (
+        {!isLoading && filteredItems.length === 0 && (
           <div className="text-center py-20 text-gray-500 border border-dashed rounded-xl mt-10">
-            No verified items found.
+            No items found matching your search.
           </div>
         )}
       </div>
