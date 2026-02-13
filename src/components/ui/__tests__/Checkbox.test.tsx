@@ -1,3 +1,10 @@
+/**
+ * This file tests the Checkbox component.
+ * It checks if:
+ * 1. The checkbox appears on the screen.
+ * 2. Clicking the checkbox toggles it (checks/unchecks).
+ * 3. The checkbox cannot be clicked when disabled.
+ */
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { Checkbox } from '../Checkbox'

@@ -1,3 +1,9 @@
+/**
+ * This file tests the Avatar component.
+ * It checks if:
+ * 1. It shows the fallback text (like "CN") when no image is found.
+ * 2. It tries to load the image when a valid URL is provided.
+ */
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { Avatar, AvatarImage, AvatarFallback } from '../Avatar'

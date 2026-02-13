@@ -1,3 +1,10 @@
+/**
+ * This file tests the Switch component (toggle button).
+ * It checks if:
+ * 1. The switch appears on the screen.
+ * 2. Clicking the switch toggles it between on/off.
+ * 3. The switch cannot be clicked when disabled.
+ */
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { Switch } from '../Switch'

@@ -1,3 +1,10 @@
+/**
+ * This file tests the Dialog (Modal) component.
+ * It checks if:
+ * 1. The dialog is hidden by default.
+ * 2. Clicking the trigger button opens the dialog.
+ * 3. The dialog shows the correct title and description when open.
+ */
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '../Dialog'

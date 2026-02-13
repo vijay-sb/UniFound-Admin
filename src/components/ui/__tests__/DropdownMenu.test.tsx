@@ -1,3 +1,10 @@
+/**
+ * This file tests the DropdownMenu component.
+ * It checks if:
+ * 1. The menu is hidden by default.
+ * 2. Clicking the trigger opens the menu to show options.
+ * 3. The menu items are clickable and displayed correctly.
+ */
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel } from '../DropdownMenu'
