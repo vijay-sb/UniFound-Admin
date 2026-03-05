@@ -4,10 +4,6 @@ import type { AdminItem, AdminItemDTO } from "@/features/items/types";
 import { apiRequest } from "./client";
 
 /**
- * Admin Item (matches backend response exactly)
- */
-
-/**
  * Fetch ALL items for admin dashboard.
  * Admin filters by status on frontend.
  *
@@ -84,4 +80,100 @@ export async function fetchItemImage(itemId: string): Promise<string> {
     `/admin/items/${itemId}/image`
   );
   return res.image_key;
+}
+
+
+/**
+ * Prepare item with questions and pickup location.
+ * VERIFIED → AVAILABLE
+ *
+ * POST /api/admin/items/:id/prepare
+ */
+export interface PrepareItemRequest {
+  questions: {
+    question: string;
+    options: string[];
+    correct_option: string;
+    is_negative: boolean;
+  }[];
+  pickup_location: string;
+}
+
+export interface PrepareItemResponse {
+  item_id: string;
+  status: "AVAILABLE";
+  prepared_at: string;
+}
+
+export function prepareItem(itemId: string, body: PrepareItemRequest) {
+  return apiRequest<PrepareItemResponse>(
+    `/admin/items/${itemId}/prepare`,
+    { method: "POST", body }
+  );
+}
+
+
+/**
+ * Generate AI questions for an item.
+ *
+ * POST /api/admin/items/:id/generate-questions
+ */
+export function generateItemQuestions(itemId: string) {
+  return apiRequest<{
+    item_id: string;
+    ai_metadata: Record<string, unknown>;
+    questions: {
+      question: string;
+      options: string[];
+      correct_option: string;
+      is_negative: boolean;
+    }[];
+  }>(`/admin/items/${itemId}/generate-questions`, { method: "POST" });
+}
+
+
+/**
+ * Verify a QR code (pickup token).
+ *
+ * POST /api/admin/claims/verify-qr
+ */
+export interface VerifyQrResponse {
+  valid: boolean;
+  token_id: string;
+  claim_id: string;
+  item_id: string;
+  user_id: string;
+  category: string;
+  campus_zone: string;
+  pickup_location: string;
+  confidence_score: number;
+  expires_at: string;
+}
+
+export function verifyQrCode(tokenId: string) {
+  return apiRequest<VerifyQrResponse>(
+    "/admin/claims/verify-qr",
+    { method: "POST", body: { token_id: tokenId } }
+  );
+}
+
+
+/**
+ * Hand over an item after QR verification.
+ * Sets item status to CLAIMED.
+ *
+ * POST /api/admin/claims/:id/handover
+ */
+export interface HandoverResponse {
+  claim_id: string;
+  item_id: string;
+  item_status: "CLAIMED";
+  message: string;
+}
+
+export function handoverItem(claimId: string) {
+  return apiRequest<HandoverResponse>(
+    `/admin/claims/${claimId}/handover`,
+    { method: "POST" }
+  );
 }
