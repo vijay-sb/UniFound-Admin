@@ -167,6 +167,18 @@ const handleLogout = () => {
             <CheckCircle className="w-4 h-4" />
             Available Items
           </Link>
+
+          <Link
+            to="/admin/audit"
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              isActive("/admin/audit")
+                ? "bg-[#3ECF8E]/10 text-[#3ECF8E]"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4" />
+            Audit Log
+          </Link>
         </nav>
 
         {/* Logout */}
