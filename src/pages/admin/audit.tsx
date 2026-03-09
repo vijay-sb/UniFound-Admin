@@ -1,137 +1,195 @@
-import ModernAdminLayout from "@/components/ui/ModernAdminLayout";
-import AdminPageHeader from "@/components/ui/AdminPageHeader";
-import { ShieldCheck, User, Clock, Activity, FileText } from "lucide-react";
+import { useState } from "react";
 import { useAuditLogs } from "@/features/audit/hooks/useAuditLogs";
-import type { AuditAction } from "@/features/audit/types";
+import AdminGuard from "@/components/AdminGuard";
+import ModernAdminLayout from "@/components/ui/ModernAdminLayout";
+import { Loader2, ShieldCheck, ChevronDown, ChevronRight } from "lucide-react";
 
-// Helper function to format timestamp
-const formatTime = (isoString: string) => {
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  }).format(new Date(isoString));
+const ACTION_BADGES: Record<string, { label: string; color: string }> = {
+  VERIFIED_ITEM: { label: "Verified", color: "bg-blue-500/20 text-blue-400 border-blue-500/30" },
+  PUBLISHED_ITEM: { label: "Published", color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
+  REJECTED_ITEM: { label: "Rejected", color: "bg-red-500/20 text-red-400 border-red-500/30" },
+  GENERATE_QUESTIONS: { label: "AI Questions", color: "bg-purple-500/20 text-purple-400 border-purple-500/30" },
+  PREPARE_ITEM: { label: "Prepared", color: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30" },
+  CREATE_CLAIM: { label: "Claim Created", color: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30" },
+  SUBMIT_CLAIM_ANSWERS: { label: "Answers Submitted", color: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
+  APPROVE_CLAIM: { label: "Claim Approved", color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
+  HANDOVER_ITEM: { label: "Handed Over", color: "bg-teal-500/20 text-teal-400 border-teal-500/30" },
+  LOGIN: { label: "Login", color: "bg-gray-500/20 text-gray-400 border-gray-500/30" },
+  LOGOUT: { label: "Logout", color: "bg-gray-500/20 text-gray-400 border-gray-500/30" },
 };
 
-// Helper function to get badge styling based on action type
-const getActionBadgeStyle = (action: AuditAction) => {
-  switch (action) {
-    case "VERIFIED_ITEM":
-      return "bg-emerald-500/10 text-emerald-500 border-emerald-500/20";
-    case "PUBLISHED_ITEM":
-      return "bg-blue-500/10 text-blue-500 border-blue-500/20";
-    case "REJECTED_ITEM":
-      return "bg-red-500/10 text-red-500 border-red-500/20";
-    case "LOGIN":
-    case "LOGOUT":
-      return "bg-purple-500/10 text-purple-500 border-purple-500/20";
-    default:
-      return "bg-gray-500/10 text-gray-400 border-gray-500/20";
-  }
-};
+const ENTITY_FILTERS = [
+  { value: "", label: "All Events" },
+  { value: "item", label: "Items" },
+  { value: "claim", label: "Claims" },
+];
 
-// Helper for formatting action display text
-const formatActionText = (action: AuditAction) => {
-  return action.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
-};
+function formatTime(ts: string): string {
+  const d = new Date(ts);
+  const now = new Date();
+  const diffMs = now.getTime() - d.getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+  if (diffMin < 1) return "just now";
+  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffHour < 24) return `${diffHour}h ago`;
+  if (diffDay < 7) return `${diffDay}d ago`;
+  return d.toLocaleDateString();
+}
 
-export default function AdminAuditPage() {
-  const { data: logs, isLoading } = useAuditLogs();
+function truncateId(id: string): string {
+  if (!id || id.length < 8) return id || "—";
+  return `${id.slice(0, 8)}…`;
+}
+
+export default function AuditPage() {
+  const [entityFilter, setEntityFilter] = useState("");
+  const [expandedRow, setExpandedRow] = useState<string | null>(null);
+
+  const { data: logs, isLoading, error } = useAuditLogs(entityFilter || undefined);
 
   return (
-    <ModernAdminLayout>
-      <div className="p-8">
-        <AdminPageHeader
-          title="Audit Log"
-          description="Track system activity, item verifications, and admin actions."
-          icon={ShieldCheck}
-        />
-
-        <div className="bg-[#121212] border border-white/5 rounded-xl overflow-hidden mt-6">
-          {/* Table Header */}
-          <div className="grid grid-cols-12 gap-4 p-4 border-b border-white/5 bg-white/[0.02] text-xs font-medium text-gray-400 uppercase tracking-wider">
-            <div className="col-span-3 flex items-center gap-2">
-              <User className="w-3.5 h-3.5" /> Admin
-            </div>
-            <div className="col-span-3 flex items-center gap-2">
-              <Activity className="w-3.5 h-3.5" /> Action
-            </div>
-            <div className="col-span-4 flex items-center gap-2">
-              <FileText className="w-3.5 h-3.5" /> Details
-            </div>
-            <div className="col-span-2 flex items-center gap-2">
-              <Clock className="w-3.5 h-3.5" /> Timestamp
-            </div>
-          </div>
-
-          {/* Loading State */}
-          {isLoading && (
-            <div className="p-8 text-center text-gray-500">
-              <div className="animate-spin w-6 h-6 border-2 border-[#3ECF8E] border-t-transparent rounded-full mx-auto mb-3"></div>
-              Loading audit logs...
-            </div>
-          )}
-
-          {/* Audit Logs List */}
-          <div className="divide-y divide-white/5">
-            {!isLoading && logs?.map((log) => (
-              <div
-                key={log.id}
-                className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-white/[0.01] transition-colors"
-              >
-                {/* Admin Name */}
-                <div className="col-span-3 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-xs font-bold text-gray-300">
-                    {log.adminName.charAt(0)}
-                  </div>
-                  <div className="text-sm font-medium text-gray-200">
-                    {log.adminName}
-                    <div className="text-xs text-gray-500 font-normal">
-                      ID: {log.adminId}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Badge */}
-                <div className="col-span-3">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium border ${getActionBadgeStyle(
-                      log.action
-                    )}`}
-                  >
-                    {formatActionText(log.action)}
-                  </span>
-                </div>
-
-                {/* Details / Item ID */}
-                <div className="col-span-4 text-sm text-gray-400 pr-4">
-                  {log.details ? (
-                    <span>{log.details}</span>
-                  ) : log.itemId ? (
-                    <span className="font-mono text-xs">Item: {log.itemId}</span>
-                  ) : (
-                    <span className="italic opacity-50">No details provided</span>
-                  )}
-                </div>
-
-                {/* Timestamp */}
-                <div className="col-span-2 text-sm text-gray-500 whitespace-nowrap">
-                  {formatTime(log.timestamp)}
-                </div>
-              </div>
-            ))}
-
-            {/* Empty State */}
-            {!isLoading && logs?.length === 0 && (
-              <div className="p-12 text-center text-gray-500">
-                No audit logs found.
-              </div>
-            )}
-          </div>
+    <AdminGuard>
+      <ModernAdminLayout>
+        <div className="p-4 md:p-8 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-emerald-400" />
+            Audit Log
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Track all actions across the system
+          </p>
         </div>
       </div>
-    </ModernAdminLayout>
+
+      {/* Entity Type Filter */}
+      <div className="flex gap-2">
+        {ENTITY_FILTERS.map((f) => (
+          <button
+            key={f.value}
+            onClick={() => setEntityFilter(f.value)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border ${
+              entityFilter === f.value
+                ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                : "bg-white/5 text-gray-400 border-white/10 hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Loading */}
+      {isLoading && (
+        <div className="flex justify-center py-16">
+          <Loader2 className="w-6 h-6 text-emerald-400 animate-spin" />
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="text-center py-16 text-red-400 text-sm">
+          Failed to load audit logs. Please try again.
+        </div>
+      )}
+
+      {/* Table */}
+      {logs && logs.length > 0 && (
+        <div className="border border-white/10 rounded-xl overflow-hidden">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-white/5 text-gray-400 text-left">
+                <th className="px-4 py-3 font-medium w-8"></th>
+                <th className="px-4 py-3 font-medium">Action</th>
+                <th className="px-4 py-3 font-medium">Entity</th>
+                <th className="px-4 py-3 font-medium hidden md:table-cell">Actor</th>
+                <th className="px-4 py-3 font-medium hidden md:table-cell">Entity ID</th>
+                <th className="px-4 py-3 font-medium text-right">Time</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              {logs.map((log) => {
+                const badge = ACTION_BADGES[log.action] ?? {
+                  label: log.action,
+                  color: "bg-gray-500/20 text-gray-400 border-gray-500/30",
+                };
+                const isExpanded = expandedRow === log.id;
+                const hasMetadata = log.metadata && Object.keys(log.metadata).length > 0;
+
+                return (
+                  <>
+                    <tr
+                      key={log.id}
+                      className="hover:bg-white/[0.02] transition-colors cursor-pointer"
+                      onClick={() => hasMetadata && setExpandedRow(isExpanded ? null : log.id)}
+                    >
+                      <td className="px-4 py-3 text-gray-500">
+                        {hasMetadata ? (
+                          isExpanded ? (
+                            <ChevronDown className="w-3.5 h-3.5" />
+                          ) : (
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          )
+                        ) : null}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span
+                          className={`text-xs font-medium px-2.5 py-1 rounded-full border ${badge.color}`}
+                        >
+                          {badge.label}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="text-xs font-mono text-gray-300 bg-white/5 px-2 py-0.5 rounded">
+                          {log.entityType}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-gray-500 hidden md:table-cell">
+                        {truncateId(log.actorId)}
+                      </td>
+                      <td className="px-4 py-3 font-mono text-xs text-gray-500 hidden md:table-cell">
+                        {truncateId(log.entityId)}
+                      </td>
+                      <td className="px-4 py-3 text-right text-gray-500 text-xs">
+                        {formatTime(log.timestamp)}
+                      </td>
+                    </tr>
+                    {isExpanded && hasMetadata && (
+                      <tr key={`${log.id}-meta`}>
+                        <td colSpan={6} className="px-8 py-3 bg-white/[0.02]">
+                          <div className="text-xs font-mono text-gray-400 space-y-1">
+                            {Object.entries(log.metadata!).map(([k, v]) => (
+                              <div key={k} className="flex gap-2">
+                                <span className="text-gray-500">{k}:</span>
+                                <span className="text-gray-300">
+                                  {typeof v === "object" ? JSON.stringify(v) : String(v)}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {logs && logs.length === 0 && (
+        <div className="text-center py-16 text-gray-500 text-sm">
+          No audit logs found{entityFilter ? ` for entity type "${entityFilter}"` : ""}.
+        </div>
+      )}
+    </div>
+      </ModernAdminLayout>
+    </AdminGuard>
   );
 }
