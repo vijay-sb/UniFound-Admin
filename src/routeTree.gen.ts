@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminUnverifiedRouteImport } from './routes/admin/unverified'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminLandingRouteImport } from './routes/admin/landing'
 import { Route as AdminAvailableRouteImport } from './routes/admin/available'
 import { Route as AdminAuditRouteImport } from './routes/admin/audit'
 import { Route as AdminVerifiedIndexRouteImport } from './routes/admin/verified/index'
@@ -30,6 +31,11 @@ const AdminUnverifiedRoute = AdminUnverifiedRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLandingRoute = AdminLandingRouteImport.update({
+  id: '/admin/landing',
+  path: '/admin/landing',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAvailableRoute = AdminAvailableRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/available': typeof AdminAvailableRoute
+  '/admin/landing': typeof AdminLandingRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/unverified': typeof AdminUnverifiedRoute
   '/admin/verified/$itemId': typeof AdminVerifiedItemIdRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/available': typeof AdminAvailableRoute
+  '/admin/landing': typeof AdminLandingRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/unverified': typeof AdminUnverifiedRoute
   '/admin/verified/$itemId': typeof AdminVerifiedItemIdRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin/audit': typeof AdminAuditRoute
   '/admin/available': typeof AdminAvailableRoute
+  '/admin/landing': typeof AdminLandingRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/unverified': typeof AdminUnverifiedRoute
   '/admin/verified/$itemId': typeof AdminVerifiedItemIdRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/audit'
     | '/admin/available'
+    | '/admin/landing'
     | '/admin/login'
     | '/admin/unverified'
     | '/admin/verified/$itemId'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/audit'
     | '/admin/available'
+    | '/admin/landing'
     | '/admin/login'
     | '/admin/unverified'
     | '/admin/verified/$itemId'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin/audit'
     | '/admin/available'
+    | '/admin/landing'
     | '/admin/login'
     | '/admin/unverified'
     | '/admin/verified/$itemId'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminAuditRoute: typeof AdminAuditRoute
   AdminAvailableRoute: typeof AdminAvailableRoute
+  AdminLandingRoute: typeof AdminLandingRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminUnverifiedRoute: typeof AdminUnverifiedRoute
   AdminVerifiedItemIdRoute: typeof AdminVerifiedItemIdRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/landing': {
+      id: '/admin/landing'
+      path: '/admin/landing'
+      fullPath: '/admin/landing'
+      preLoaderRoute: typeof AdminLandingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/available': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminAuditRoute: AdminAuditRoute,
   AdminAvailableRoute: AdminAvailableRoute,
+  AdminLandingRoute: AdminLandingRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminUnverifiedRoute: AdminUnverifiedRoute,
   AdminVerifiedItemIdRoute: AdminVerifiedItemIdRoute,
