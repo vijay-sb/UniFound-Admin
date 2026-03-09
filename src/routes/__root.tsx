@@ -18,13 +18,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootComponent() {
   const location = useLocation()
-  const isLoginPage = location.pathname.includes('/login')
+  const isFullScreenPage = location.pathname.includes('/login') || location.pathname.includes('/landing')
 
   return (
     <>
-      {!isLoginPage && <Header />}
+      {!isFullScreenPage && <Header />}
       <Outlet />
-      {!isLoginPage && (
+      {!isFullScreenPage && (
         <TanStackDevtools
           config={{
             position: 'bottom-right',
