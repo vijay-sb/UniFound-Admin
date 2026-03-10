@@ -1,17 +1,39 @@
+// ============================================================================
+// VERIFY BUTTON COMPONENT
+// ============================================================================
+// Button for admins to verify unverified items
+// Shows loading state with spinner during verification
+
 import { Check, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 interface VerifyButtonProps {
-  itemId: string;
-  onVerify: (id: string) => void;
+  itemId: string; // ID of item to verify
+  onVerify: (id: string) => void; // Callback when verify button is clicked
 }
 
+/**
+ * Button for admins to verify an item as legitimate
+ * - Shows loading spinner during verification
+ * - Disables button while verifying
+ * - Displays checkmark icon when ready
+ * 
+ * @param itemId - ID of the item being verified
+ * @param onVerify - Callback function called with itemId when button clicked
+ * @returns Styled button with loading state
+ * 
+ * @example
+ * <VerifyButton
+ *   itemId="item-123"
+ *   onVerify={(id) => console.log('Verifying', id)}
+ * />
+ */
 export default function VerifyButton({ itemId, onVerify }: VerifyButtonProps) {
   const [loading, setLoading] = useState(false);
 
   const handleClick = () => {
     setLoading(true);
-    // Simulate API delay
+    // Simulate API delay for UX
     setTimeout(() => {
       onVerify(itemId);
       setLoading(false);
@@ -33,8 +55,10 @@ export default function VerifyButton({ itemId, onVerify }: VerifyButtonProps) {
       "
     >
       {loading ? (
+        // Show spinner while loading
         <Loader2 className="w-3.5 h-3.5 animate-spin" />
       ) : (
+        // Show checkmark when ready
         <Check className="w-3.5 h-3.5" />
       )}
       <span className="relative z-10">

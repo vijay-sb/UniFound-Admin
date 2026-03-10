@@ -1,3 +1,9 @@
+// ============================================================================
+// ADMIN UNVERIFIED ITEMS PAGE
+// ============================================================================
+// Dashboard for reviewing and verifying items not yet confirmed by admin
+// Displays unverified items with search and filter capabilities
+
 import ModernAdminLayout from "@/components/ui/ModernAdminLayout";
 import AdminPageHeader from "@/components/ui/AdminPageHeader";
 import { AlertCircle } from "lucide-react";
@@ -9,6 +15,15 @@ import AdminSearchBar from "@/features/items/components/AdminSearchBar";
 import AdminFilterBar from "@/features/items/components/AdminFilterBar";
 import { useItemSearch } from "@/features/items/hooks/useItemSearch";
 
+/**
+ * Page showing unverified items that need admin confirmation
+ * Admins can:
+ * - View items awaiting verification
+ * - Search and filter by category, zone, or type
+ * - Click verify button to confirm item is legitimate
+ * 
+ * @returns Unverified items page JSX
+ */
 export default function AdminUnverifiedPage() {
   const { data, isLoading, isError } = useAdminItems();
   const verifyMutation = useVerifyItem();

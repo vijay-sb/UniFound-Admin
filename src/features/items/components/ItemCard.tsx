@@ -1,3 +1,9 @@
+// ============================================================================
+// ITEM CARD COMPONENT
+// ============================================================================
+// Displays a single item with details, image preview, and action buttons
+// Shows item information and verification status in a card format
+
 import { useState } from "react";
 import { Calendar, MapPin, Tag, Image, X } from "lucide-react";
 import StatusBadge from "./StatusBadge";
@@ -6,17 +12,34 @@ import { useItemImage } from "@/features/auth/hooks/useImage";
 import type { AdminItem } from "../types";
 
 interface ItemCardProps {
-  item: AdminItem;
-  onVerify?: (id: string) => void;
-  showVerifyAction?: boolean;
+  item: AdminItem; // Item data to display
+  onVerify?: (id: string) => void; // Callback when verify button is clicked
+  showVerifyAction?: boolean; // Whether to show verify button (for unverified items)
 }
 
+/**
+ * Displays a single lost/found item in a card format
+ * Shows:
+ * - Item status badge (color-coded)
+ * - Item ID
+ * - Category and type
+ * - Location and time found/lost
+ * - Image preview modal on demand
+ * - Verify button (if applicable)
+ * 
+ * @param item - Item data to display
+ * @param onVerify - Optional callback when user verifies the item
+ * @param showVerifyAction - Whether to show verify button
+ * @returns Card component with item details and actions
+ */
 export default function ItemCard({
   item,
   onVerify,
   showVerifyAction = false,
 }: ItemCardProps) {
+  // Track image preview modal state
   const [showImage, setShowImage] = useState(false);
+  // Track whether image is zoomed in the modal
   const [zoomed, setZoomed] = useState(false);
 
   const {

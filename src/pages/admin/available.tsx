@@ -1,3 +1,9 @@
+// ============================================================================
+// ADMIN AVAILABLE ITEMS PAGE
+// ============================================================================
+// Dashboard for items that are published and available for user claims
+// Displays items currently claimable by users
+
 import ModernAdminLayout from "@/components/ui/ModernAdminLayout";
 import AdminPageHeader from "@/components/ui/AdminPageHeader";
 import { CheckCircle, Lock } from "lucide-react";
@@ -8,6 +14,15 @@ import AdminSearchBar from "@/features/items/components/AdminSearchBar";
 import AdminFilterBar from "@/features/items/components/AdminFilterBar";
 import { useItemSearch } from "@/features/items/hooks/useItemSearch";
 
+/**
+ * Page showing items that are published and currently available for claims
+ * Admins can:
+ * - View items that are live for user claims
+ * - Search and filter by category, zone, or type
+ * - View item status and related claims (claim flow disabled for now)
+ * 
+ * @returns Available items page JSX
+ */
 export default function AdminAvailablePage() {
   const { data, isLoading, isError } = useAdminItems();
 

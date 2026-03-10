@@ -1,3 +1,9 @@
+// ============================================================================
+// ADMIN VERIFIED ITEM DETAIL PAGE
+// ============================================================================
+// Item-specific page for preparing items for user claims
+// Admins can generate/edit claim verification questions before publishing
+
 import { useState } from "react";
 import { useParams, Link } from "@tanstack/react-router";
 import ModernAdminLayout from "@/components/ui/ModernAdminLayout";
@@ -5,11 +11,27 @@ import AdminPageHeader from "@/components/ui/AdminPageHeader";
 import { ShieldCheck, Plus, CheckCircle, ArrowLeft } from "lucide-react";
 import AdminGuard from "@/components/AdminGuard";
 
+/**
+ * Type for claim verification questions
+ * Users must answer these when claiming an item
+ */
 type ClaimQuestion = {
-  id: string;
-  text: string;
+  id: string; // Unique question identifier
+  text: string; // Question text
 };
 
+/**
+ * Item preparation page for setting up claim questions
+ * Admins can:
+ * - View item details (itemId from URL)
+ * - Generate default claim questions
+ * - Add custom claim questions
+ * - Publish item to make it available for claims
+ * 
+ * Route: /admin/verified/:itemId
+ * 
+ * @returns Item detail page JSX
+ */
 export default function AdminVerifiedItemPage() {
   const { itemId } = useParams({ strict: false }) as { itemId: string };
 

@@ -1,9 +1,22 @@
+// ============================================================================
+// STATUS BADGE COMPONENT
+// ============================================================================
+// Displays colored badge showing item status with appropriate styling
+
 import type { ItemStatus } from "../types";
 
 interface StatusBadgeProps {
-  status: ItemStatus;
+  status: ItemStatus; // Item status to display
 }
 
+/**
+ * Maps each status to its corresponding color and styling
+ * - UNVERIFIED: Yellow (needs admin review)
+ * - VERIFIED: Green (confirmed legitimate)
+ * - AVAILABLE: Blue (published for claims)
+ * - CLAIMED: Gray (already claimed)
+ * - REJECTED: Red (rejected by admin)
+ */
 const styles: Record<ItemStatus, string> = {
   UNVERIFIED: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
   VERIFIED: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
@@ -12,6 +25,16 @@ const styles: Record<ItemStatus, string> = {
   REJECTED: "bg-red-500/10 text-red-500 border-red-500/20",
 };
 
+/**
+ * Displays item status with color-coded badge
+ * Used in item cards to show current item state at a glance
+ * 
+ * @param status - Current status of the item
+ * @returns Styled badge with status text
+ * 
+ * @example
+ * <StatusBadge status="UNVERIFIED" /> // Shows yellow UNVERIFIED badge
+ */
 export default function StatusBadge({ status }: StatusBadgeProps) {
   return (
     <span

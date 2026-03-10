@@ -1,3 +1,9 @@
+// ============================================================================
+// ADMIN VERIFIED ITEMS PAGE
+// ============================================================================
+// Dashboard for items that have been verified and confirmed
+// Displays verified items ready to be published for user claims
+
 import ModernAdminLayout from "@/components/ui/ModernAdminLayout";
 import AdminSearchBar from "@/features/items/components/AdminSearchBar";
 import AdminFilterBar from "@/features/items/components/AdminFilterBar";
@@ -8,6 +14,16 @@ import { Link } from "@tanstack/react-router";
 import ItemCard from "@/features/items/components/ItemCard";
 import { useAdminItems } from "@/features/items/hooks/useAdminItems";
 
+/**
+ * Page showing verified items that are confirmed legitimate
+ * Admins can:
+ * - View items that have passed verification
+ * - Search and filter by category, zone, or type
+ * - Click "Prepare for Claims" to set up claim questions
+ * - Publish items for users to claim
+ * 
+ * @returns Verified items page JSX
+ */
 export default function AdminVerifiedPage() {
   const { data, isLoading, isError } = useAdminItems();
 

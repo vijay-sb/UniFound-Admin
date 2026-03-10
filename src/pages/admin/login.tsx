@@ -1,7 +1,24 @@
+// ============================================================================
+// ADMIN LOGIN PAGE
+// ============================================================================
+// User authentication page for admin dashboard
+// Allows admins to log in with email and password
+
 import { useState } from "react";
 import { useLogin } from "@/features/auth/hooks/useLogin";
 import { Loader2, Lock, Mail, ArrowRight } from "lucide-react";
 
+/**
+ * Login page for admin users
+ * Features:
+ * - Email and password input fields
+ * - Form validation
+ * - Loading state during authentication
+ * - Error message display
+ * - Animated background design
+ * 
+ * @returns Login page JSX
+ */
 export default function AdminLoginPage() {
   const loginMutation = useLogin();
   const [email, setEmail] = useState("");
