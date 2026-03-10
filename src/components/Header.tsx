@@ -1,14 +1,29 @@
-import { Link } from '@tanstack/react-router'
+// ============================================================================
+// GLOBAL HEADER & NAVIGATION COMPONENT
+// ============================================================================
+// Main navigation header with collapsible sidebar
+// Provides links to main application sections
 
+import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Home, Menu, Network, X } from 'lucide-react'
 
+/**
+ * Global header with responsive sidebar navigation
+ * Desktop: Sidebar hidden, hamburger toggles it
+ * Mobile: Shows hamburger menu to open/close sidebar
+ * 
+ * @returns Header and navigation sidebar JSX
+ */
 export default function Header() {
+  // Track if sidebar is open on mobile
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
+      {/* Header Bar */}
       <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
+        {/* Hamburger Menu Button */}
         <button
           onClick={() => setIsOpen(true)}
           className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
@@ -16,6 +31,8 @@ export default function Header() {
         >
           <Menu size={24} />
         </button>
+        
+        {/* Site Logo/Title */}
         <h1 className="ml-4 text-xl font-semibold">
           <Link to="/">
             <img
@@ -27,13 +44,16 @@ export default function Header() {
         </h1>
       </header>
 
+      {/* Sidebar Navigation */}
       <aside
         className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
+        {/* Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-700">
           <h2 className="text-xl font-bold">Navigation</h2>
+          {/* Close Button */}
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
@@ -43,7 +63,9 @@ export default function Header() {
           </button>
         </div>
 
+        {/* Navigation Links */}
         <nav className="flex-1 p-4 overflow-y-auto">
+          {/* Home Link */}
           <Link
             to="/"
             onClick={() => setIsOpen(false)}
@@ -57,8 +79,7 @@ export default function Header() {
             <span className="font-medium">Home</span>
           </Link>
 
-          {/* Demo Links Start */}
-
+          {/* TanStack Query Demo Link */}
           <Link
             to="/"
             onClick={() => setIsOpen(false)}
@@ -71,8 +92,6 @@ export default function Header() {
             <Network size={20} />
             <span className="font-medium">TanStack Query</span>
           </Link>
-
-          {/* Demo Links End */}
         </nav>
       </aside>
     </>
